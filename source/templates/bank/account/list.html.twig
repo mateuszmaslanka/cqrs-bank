@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Bank accounts</h1>
+    <ol>
+        {% for bankAccount in bankAccounts %}
+            <li>
+                <a href="#">{{ bankAccount.accountNumber }}</a>
+            </li>
+        {% endfor %}
+    </ol>
+{% endblock %}
