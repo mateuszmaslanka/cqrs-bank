@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Bank</h1>
+    <ul>
+        <li><a href="{{ path('cqrs_bank_account_create') }}">Add new bank account</a></li>
+        <li><a href="{{ path('cqrs_bank_account_list') }}">List bank accounts</a></li>
+    </ul>
+{% endblock %}

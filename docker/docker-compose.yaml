@@ -1,0 +1,23 @@
+services:
+  php-cli:
+    build:
+      context: .
+      dockerfile: ./php-cli/Dockerfile
+    volumes:
+      - ./../source/:/app/
+  nginx:
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile
+    volumes:
+      - ./../source/:/var/www/cqrs/
+    ports:
+      - 8080:80
+  php-fpm:
+    build:
+      context: .
+      dockerfile: ./php-fpm/Dockerfile
+    volumes:
+      - ./../source/:/var/www/cqrs/
+    environment:
+      APP_ENV: dev

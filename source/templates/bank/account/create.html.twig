@@ -1,0 +1,6 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Created bank account</h1>
+    <a href="{{ path('cqrs_bank_account_details', {accountNumber: bankAccount.accountNumber}) }}">{{ bankAccount.accountNumber.format }}</a>
+{% endblock %}

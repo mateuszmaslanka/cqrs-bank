@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Bank account</h1>
+    <strong>Account number:</strong> {{ bankAccount.accountNumber }}<br />
+    <strong>Account balance:</strong> {{ bankAccount.accountBalance }}<br />
+
+    <br /><br />
+    <hr />
+    <i>Cache hit:</i> <pre>{{ isCacheHit ? 'true' : 'false' }}</pre><br />
+    <i>Current time:</i> <pre>{{ "now"|date("Y-m-d H:i:s.u") }}</pre><br />
+    <i>Cache expires at:</i> <pre>{{ cacheExpiresAt|date("Y-m-d H:i:s.u") }}</pre><br />
+{% endblock %}
