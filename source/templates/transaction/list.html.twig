@@ -1,0 +1,131 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <style>
+        #example1, #example2, #example3, #example4, #example5 {
+            font-style: italic;
+        }
+    </style>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('example-1-1').onclick = function() {
+                document.getElementById('modifier1').checked = true;
+                document.getElementById('query').value = 'blik';
+                return false;
+            };
+
+            document.getElementById('example-1-2').onclick = function() {
+                document.getElementById('modifier2').checked = true;
+                document.getElementById('query').value = 'blik';
+                return false;
+            };
+
+            document.getElementById('example-2-1').onclick = function() {
+                document.getElementById('modifier1').checked = true;
+                document.getElementById('query').value = '"paid by blik"';
+                return false;
+            };
+
+            document.getElementById('example-2-2').onclick = function() {
+                document.getElementById('modifier1').checked = true;
+                document.getElementById('query').value = 'paid by blik';
+                return false;
+            };
+
+            document.getElementById('example-2-3').onclick = function() {
+                document.getElementById('modifier1').checked = true;
+                document.getElementById('query').value = 'by';
+                return false;
+            };
+
+            document.getElementById('example-3-1').onclick = function() {
+                document.getElementById('modifier3').checked = true;
+                document.getElementById('query').value = 'pa*';
+                return false;
+            };
+
+            document.getElementById('example-3-2').onclick = function() {
+                document.getElementById('modifier3').checked = true;
+                document.getElementById('query').value = 'card +debit';
+                return false;
+            };
+
+            document.getElementById('example-3-3').onclick = function() {
+                document.getElementById('modifier3').checked = true;
+                document.getElementById('query').value = 'card -debit';
+                return false;
+            };
+        });
+    </script>
+{% endblock %}
+
+{% set bankAccountId = bankAccountId ?? 'unknown' %}
+{% set modifier = modifier ?? 'IN NATURAL LANGUAGE MODE' %}
+{% set query = query ?? '' %}
+
+{% block body %}
+    <h1>Transactions</h1>
+    <h3>for Bank ID: {{ bankAccountId }} </h3>
+
+    <fieldset>
+        <legend>Fulltext search</legend>
+        <form action="{{ path('cqrs_transaction_list', {bankAccountId: bankAccountId}) }}" method="POST">
+            <ul>
+                <li>Example 1:
+                    <ol>
+                        <li><a href="#" id="example-1-1">natural search</a></li>
+                        <li><a href="#" id="example-1-2">with query expansion</a></li>
+                    </ol>
+                </li>
+                <li>Example 2:
+                    <ol>
+                        <li><a href="#" id="example-2-1">natural search - full phrase</a></li>
+                        <li><a href="#" id="example-2-2">natural search - words</a></li>
+                        <li><a href="#" id="example-2-3">natural search - stopword</a></li>
+                    </ol>
+                </li>
+                <li>Example 3:
+                    <ol>
+                        <li><a href="#" id="example-3-1">boolean - wildcard</a></li>
+                        <li><a href="#" id="example-3-2">natural - +word</a></li>
+                        <li><a href="#" id="example-3-3">natural - -word</a></li>
+                    </ol>
+                </li>
+            </ul>
+            <hr />
+            <br />
+
+            <label>Modifier:</label>
+            <br />
+            <input type="radio" id="modifier1" name="modifier" value="IN NATURAL LANGUAGE MODE" {{ modifier == 'IN NATURAL LANGUAGE MODE' ? 'checked' }} />
+            <label for="modifier1">IN NATURAL LANGUAGE MODE (default mode, without operators)</label>
+            <br />
+            <input type="radio" id="modifier2" name="modifier" value="IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION" {{ modifier == 'IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION' ? 'checked' }} />
+            <label for="modifier2">IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION / WITH QUERY EXPANSION (natural search - twice)</label>
+            <br />
+            <input type="radio" id="modifier3" name="modifier" value="IN BOOLEAN MODE" {{ modifier == 'IN BOOLEAN MODE' ? 'checked' }} />
+            <label for="modifier3">IN BOOLEAN MODE (with operators, like +, -, ", *, &lt;, &gt;)</label>
+            <br />
+            <br />
+            <label for="query">Search query:</label>
+            <br />
+            <textarea id="query" name="query" rows="5" cols="70">{{ query }}</textarea>
+            <br />
+            <br />
+            <button type="submit">Search</button>
+        </form>
+    </fieldset>
+
+    <ul>
+        {% for transaction in transactions %}
+            <li>
+                <strong>ID: </strong>{{ transaction.id }}
+                &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Amount: </strong>{{ transaction.amount / 100 }} EUR
+                &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Title: </strong>{{ transaction.title }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -32,5 +32,21 @@ services:
         decorates: session.factory
         arguments: ['@.inner']
 
+    app.reository:
+        class: App\Infrastructure\Repository\BankAccountInMemoryRepository
+        # class: App\Infrastructure\Repository\BankAccountMysqlRepository
+
+    App\Domain\Repository\BankAccountDepositor:
+        alias: app.reository
+
+    App\Domain\Repository\BankAccountPayer:
+        alias: app.reository
+
+    App\Domain\Repository\BankAccountCreator:
+        alias: app.reository
+
+    App\Domain\Repository\BankAccountProvider:
+        alias: app.reository
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

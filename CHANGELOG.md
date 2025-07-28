@@ -13,4 +13,5 @@
 * Install `composer require symfony/yaml` in composer
 * Install `composer require symfony/messenger` in composer
 * Install `composer require psr/cache` in composer
+* Install `composer require symfony/dotenv` in composer
 * TBC...

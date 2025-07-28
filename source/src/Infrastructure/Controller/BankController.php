@@ -8,6 +8,7 @@ use App\Application\Bus\CommandBus;
 use App\Application\Bus\QueryBus;
 use App\Application\Command\CreateBankAccount\CreateBankAccount;
 use App\Application\Command\DepositIntoBankAccount\DepositIntoBankAccount;
+use App\Application\Command\PaymentFromBankAccount\PaymentFromBankAccount;
 use App\Application\Query\GetBankAccountByAccountNumber\GetBankAccountByAccountNumber;
 use App\Application\Query\GetBankAccountById\GetBankAccountById;
 use App\Application\Query\GetBankAccounts\GetBankAccounts;
@@ -71,6 +72,18 @@ class BankController extends AbstractController
         return $this->accountList();
     }
 
+    #[Route('/account/pay/{accountNumber}/{amount}', name: '_account_pay')]
+    public function accountPay(string $accountNumber, int $amount): Response
+    {
+        $command = new PaymentFromBankAccount($accountNumber, $amount);
+        $this->commandBus->dispatch($command);
+
+        $cacheKey = $this->createBankAccountCacheKey($accountNumber);
+        $this->cache->deleteItem($cacheKey);
+
+        return $this->accountList();
+    }
+
     #[Route('/account/{accountNumber}', name: '_account_details')]
     public function accountDetails(string $accountNumber): Response
     {
@@ -83,7 +96,7 @@ class BankController extends AbstractController
             $bankAccount = $this->queryBus->query($query);
 
             $cacheItem->set($bankAccount);
-            $cacheItem->expiresAfter(15);
+            $cacheItem->expiresAfter(30);
             $this->cache->save($cacheItem);
         }
 

@@ -1,1 +1,4 @@
 /.vscode
+!/**/.gitkeep
+/docker/mysql/data
+/docker/elasticsearch/data

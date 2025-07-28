@@ -1,7 +1,10 @@
-.PHONY: start stop cli open open-console fix-permissions
+.PHONY: build start stop cli open open-console fix-permissions
+
+build:
+	docker-compose -f ./docker/docker-compose.yaml build
 
 start:
-	docker-compose -f ./docker/docker-compose.yaml up -d
+	docker-compose -f ./docker/docker-compose.yaml up -d --remove-orphans
 
 stop:
 	docker-compose -f ./docker/docker-compose.yaml down
@@ -17,4 +20,4 @@ open-console:
 	xdg-open http://localhost:8080/bank
 
 fix-permissions:
-	sudo chown $USER:$USER -R ./source/*
+	sudo chown ${USER}:${USER} -R ./source/*

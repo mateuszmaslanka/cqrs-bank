@@ -9,7 +9,11 @@
                 &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Balance:</strong> {{ bankAccount.accountBalance }} 
                 &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Deposit:</strong>
                 <a class="btn" href="{{ path('cqrs_bank_account_deposit', {accountNumber: bankAccount.accountNumber, amount: 10000}) }}">+100 EUR</a>
-                <a class="btn" href="{{ path('cqrs_bank_account_deposit', {accountNumber: bankAccount.accountNumber, amount: -10}) }}">-10 EUR</a>
+                <a class="btn" href="{{ path('cqrs_bank_account_deposit', {accountNumber: bankAccount.accountNumber, amount: 1000}) }}">+10 EUR</a>
+                &nbsp;&nbsp;|&nbsp;&nbsp; <strong>Pay:</strong>
+                <a class="btn" href="{{ path('cqrs_bank_account_pay', {accountNumber: bankAccount.accountNumber, amount: 10000}) }}">-100 EUR</a>
+                <a class="btn" href="{{ path('cqrs_bank_account_pay', {accountNumber: bankAccount.accountNumber, amount: 1000}) }}">-10 EUR</a>
+                &nbsp;&nbsp;|&nbsp;&nbsp; <a href="{{ path('cqrs_transaction_list', {bankAccountId: bankAccount.id}) }}">show transaction</a>
             </li>
         {% endfor %}
     </ol>

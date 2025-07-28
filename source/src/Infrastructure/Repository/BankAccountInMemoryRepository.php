@@ -7,19 +7,22 @@ namespace App\Infrastructure\Repository;
 use App\Domain\Model\BankAccount;
 use App\Domain\Repository\BankAccountCreator;
 use App\Domain\Repository\BankAccountDepositor;
+use App\Domain\Repository\BankAccountPayer;
 use App\Domain\Repository\BankAccountProvider;
 use App\Domain\ValueObject\AccountNumber;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class BankAccountInMemoryRepository implements BankAccountProvider, BankAccountCreator, BankAccountDepositor
+class BankAccountInMemoryRepository implements BankAccountProvider, BankAccountCreator, BankAccountDepositor, BankAccountPayer
 {
     /** $var BankAccount[] */
     private array $bankAccounts = [];
     private SessionInterface $session;
 
-    public function __construct(RequestStack $requestStack)
-    {
+    public function __construct(
+        RequestStack $requestStack,
+        private readonly TransactionMysqlRepository $tansactionRepository,
+    ) {
         $this->session = $requestStack->getSession();
         $this->restore();
     }
@@ -66,5 +69,21 @@ class BankAccountInMemoryRepository implements BankAccountProvider, BankAccountC
     {
         $bankAccount = $this->findOneBankAccountByAccountNumber($accountNumber);
         $bankAccount->deposite($amount);
+
+        $this->tansactionRepository->addTransaction(
+            $bankAccount->getId(),
+            $amount,
+        );
+    }
+
+    public function payFromBankAccount(AccountNumber $accountNumber, int $amount): void
+    {
+        $bankAccount = $this->findOneBankAccountByAccountNumber($accountNumber);
+        $bankAccount->pay($amount);
+
+        $this->tansactionRepository->addTransaction(
+            $bankAccount->getId(),
+            -$amount,
+        );
     }
 }

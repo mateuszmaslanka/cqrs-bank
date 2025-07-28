@@ -21,3 +21,24 @@ services:
       - ./../source/:/var/www/cqrs/
     environment:
       APP_ENV: dev
+  mysql:
+    image: mysql:9.3
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: cqrs
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    ports:
+      - 13306:3306
+  elasticsearch:
+    image: elasticsearch:9.0.3
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    volumes:
+      - ./elasticsearch/data:/usr/share/elasticsearch/data
+    ports:
+      - 19200:9200

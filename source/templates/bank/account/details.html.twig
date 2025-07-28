@@ -4,6 +4,7 @@
     <h1>Bank account</h1>
     <strong>Account number:</strong> {{ bankAccount.accountNumber }}<br />
     <strong>Account balance:</strong> {{ bankAccount.accountBalance }}<br />
+    <a href="{{ path('cqrs_transaction_list', {bankAccountId: bankAccount.id}) }}">Show transaction</a></br />
 
     <br /><br />
     <hr />
